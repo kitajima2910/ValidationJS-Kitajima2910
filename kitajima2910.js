@@ -32,6 +32,7 @@ const CHECK_PHONE = 'Số điện thoại của bạn nhập không hợp lệ -
 const CHECK_COMMENT = 'Bình luận của bạn nhập không hợp lệ -_-';
 const CHECK_PASS = 'Mật khẩu của bạn nhập không bảo mật tốt -_-';
 const CHECK_PASS_CFM = 'Mật khẩu nhập lại của bạn không trùng khớp -_-';
+const CHECK_SELECT = 'Bạn không được để mặc định, hãy lựa chọn -_-';
 
 /**
  * Get element by ID
@@ -42,7 +43,7 @@ function DomID(id) {
     return document.getElementById(id);
 }
 
-// DomID with input
+// DomID with input normal
 var txtName = DomID('txtName');
 var txtFullName = DomID('txtFullName');
 var txtAddress = DomID('txtAddress');
@@ -51,6 +52,75 @@ var txtPhone = DomID('txtPhone');
 var txtComment = DomID('txtComment');
 var txtPass = DomID('txtPass');
 var txtPassCfm = DomID('txtPassCfm');
+
+// DomID select
+var cbCommon = DomID('cbCommon');
+
+// DomID input date
+var txtDate = DomID('txtDate');
+
+// DomID checkbox, radio
+var ckCommons = document.querySelectorAll('[type="checkbox"]');
+var rdCommons = document.querySelectorAll('[type="radio"]');
+
+
+/**
+ * Get current date
+ */
+function getDate() {
+    let currentDate = new Date();
+    let year = currentDate.getFullYear();
+    let month = currentDate.getMonth() + 1;
+    let day = currentDate.getDate();
+
+    month = month < 10 ? '0' + month : month;
+    day = day < 10 ? '0' + day : day;
+
+    return `${year}-${month}-${day}`;
+}
+
+txtDate.defaultValue = getDate();
+
+/**
+ * Get checkbox
+ * 
+ * @param checkboxs Array checkbox 
+ */
+function getCheckBox(...checkboxs) {
+    let arrCheckboxs = [];
+    checkboxs[0].forEach(e => {
+        if (e.checked) {
+            arrCheckboxs.push(e.value);
+        }
+    });
+    return arrCheckboxs;
+}
+
+/**
+ * Get radio
+ * 
+ * @param radio Arr Radio 
+ */
+function getRadio(...radios) {
+    let tmpRd = '';
+    radios[0].forEach(e => {
+        if (e.checked) {
+            tmpRd = e.value;
+        }
+    });
+    return tmpRd;
+}
+
+/**
+ * Check date
+ * 
+ * @param date Date 
+ */
+function checkDate(date) {
+    let currentYear = new Date().getFullYear();
+    let arrDate = date.value.split('-');
+    return currentYear - +arrDate[0];
+}
 
 /**
  * Realtime check
@@ -74,6 +144,25 @@ function checkRealtime(field, typeEvent, regex, content) {
                     field.style.border = '2px solid red';
                     field.setCustomValidity(content);
                 }
+            }
+        });
+    }
+}
+
+/**
+ * Realtime combobox
+ * 
+ * @param field Combobox 
+ */
+function checkRealtimeCombobox(field, typeEvent) {
+    if (field) {
+        field.addEventListener(typeEvent, () => {
+            if (field.value === '') {
+                field.style.border = '2px solid red';
+                field.setCustomValidity(CHECK_SELECT);
+            } else {
+                field.style.border = '2px solid blue';
+                field.setCustomValidity('');
             }
         });
     }
@@ -114,6 +203,7 @@ checkRealtime(DomID('txtPhone'), 'input', PATTERN.regexPhone, CHECK_PHONE);
 checkRealtime(DomID('txtComment'), 'input', PATTERN.regexComment, CHECK_COMMENT);
 checkRealtime(DomID('txtPass'), 'input', PATTERN.regexPass, CHECK_PASS);
 checkRealtimePassCfm(DomID('txtPassCfm'), 'input', CHECK_PASS_CFM, txtPass);
+checkRealtimeCombobox(DomID('cbCommon'), 'change');
 
 /**
  * Check Regex (input, select)
@@ -135,6 +225,40 @@ function checkRegex(field, regex, content) {
                 field.setCustomValidity(content);
                 return false;
             }
+        }
+    }
+}
+
+/**
+ * Check combobox
+ * 
+ * @param field Combobox 
+ */
+function checkCombobox(field) {
+    if (field) {
+        if (field.value === '') {
+            field.setCustomValidity(CHECK_SELECT);
+            return false;
+        } else {
+            field.setCustomValidity('');
+            return true;
+        }
+    }
+}
+
+/**
+ * Check combobox
+ * 
+ * @param field Combobox 
+ */
+function checkDateAge(field, ageNumber) {
+    if (field) {
+        if (checkDate(field) < ageNumber) {
+            field.setCustomValidity('Bạn chưa đủ 18 tuổi -_-');
+            return false;
+        } else {
+            field.setCustomValidity('');
+            return true;
         }
     }
 }
@@ -210,6 +334,16 @@ function validation() {
             flag = false;
         }
     }
+    if (cbCommon !== null) {
+        if (!checkCombobox(cbCommon)) {
+            flag = false;
+        }
+    }
+    if (txtDate !== null) {
+        if (!checkDateAge(txtDate, 17)) {
+            flag = false;
+        }
+    }
 
     return flag;
 }
@@ -218,7 +352,11 @@ function validation() {
 document.querySelector('[type="submit"]').addEventListener('click', (e) => {
 
     if (validation()) {
-        alert('OK');
+        let arr = [];
+        arr.push('====== THÔNG TIN ======');
+        // arr.push('Date: ' + txtDate.value);
+        arr.push('=======================')
+        alert(arr.join('\n'));
         e.preventDefault();
     }
 
@@ -233,14 +371,25 @@ document.querySelector('[type="submit"]').addEventListener('click', (e) => {
 function defaultField(fields, tag) {
     if (tag === 'input') {
         fields.forEach(field => {
-            field.style.borderWidth = '2px';
-            field.style.borderStyle = 'inset';
-            field.style.borderColor = 'initial';
+            // field.style.borderWidth = '2px';
+            // field.style.borderStyle = 'inset';
+            // field.style.borderColor = 'initial';
+        });
+    }
+    if (tag === 'select') {
+        fields.forEach(field => {
+            // field.style.borderWidth = '1px';
+            // field.style.borderStyle = 'solid';
+            // field.style.borderColor = 'rgb(169, 169, 169)';
         });
     }
 }
 
+
 document.querySelector('[type="reset"]').addEventListener('click', (e) => {
-    let inputs = document.querySelectorAll('input');
-    defaultField(inputs, 'input');
+    // let inputs = document.querySelectorAll('input');
+    // let selects = document.querySelectorAll('select');
+    txtDate.defaultValue = getDate();
+    // defaultField(inputs, 'input');
+    // defaultField(selects, 'select');
 })
