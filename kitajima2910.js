@@ -1,73 +1,77 @@
 /**
- * ██╗  ██╗██╗████████╗ █████╗      ██╗██╗███╗   ███╗ █████╗ 
- * ██║ ██╔╝██║╚══██╔══╝██╔══██╗     ██║██║████╗ ████║██╔══██╗
- * █████╔╝ ██║   ██║   ███████║     ██║██║██╔████╔██║███████║
- * ██╔═██╗ ██║   ██║   ██╔══██║██   ██║██║██║╚██╔╝██║██╔══██║
- * ██║  ██╗██║   ██║   ██║  ██║╚█████╔╝██║██║ ╚═╝ ██║██║  ██║
- * ╚═╝  ╚═╝╚═╝   ╚═╝   ╚═╝  ╚═╝ ╚════╝ ╚═╝╚═╝     ╚═╝╚═╝  ╚═╝
+ * 
+ * ██╗  ██╗██╗████████╗ █████╗      ██╗██╗███╗   ███╗ █████╗ ██████╗  █████╗  ██╗ ██████╗ 
+ * ██║ ██╔╝██║╚══██╔══╝██╔══██╗     ██║██║████╗ ████║██╔══██╗╚════██╗██╔══██╗███║██╔═████╗
+ * █████╔╝ ██║   ██║   ███████║     ██║██║██╔████╔██║███████║ █████╔╝╚██████║╚██║██║██╔██║
+ * ██╔═██╗ ██║   ██║   ██╔══██║██   ██║██║██║╚██╔╝██║██╔══██║██╔═══╝  ╚═══██║ ██║████╔╝██║
+ * ██║  ██╗██║   ██║   ██║  ██║╚█████╔╝██║██║ ╚═╝ ██║██║  ██║███████╗ █████╔╝ ██║╚██████╔╝
+ * ╚═╝  ╚═╝╚═╝   ╚═╝   ╚═╝  ╚═╝ ╚════╝ ╚═╝╚═╝     ╚═╝╚═╝  ╚═╝╚══════╝ ╚════╝  ╚═╝ ╚═════╝                              
+ * 
  * Author: kitajima2910@gmail.com
- * Version: 1.0.0
+ * Version: 1.0.1
  * Date: 2019-10-24
+ * Update: 2019-10-29
  * [Validation of HTML5 - JAVASCRIPT]
  */
 
-/** Pattern is regex commom */
-const PATTERN = {
-    regexName: /^[a-z\u00C0-\u024F\u1E00-\u1EFF ]{5,30}$/i,
-    regexFullName: /^[a-z\u00C0-\u024F\u1E00-\u1EFF ]{5,30}$/i,
-    regexAddress: /^[a-z\u00C0-\u024F\u1E00-\u1EFF ]{5,30}$/i,
-    regexEmail: /^([a-z\d]{5,15})@([a-z\d]{2,10})\.([a-z]{2,5})(\.[a-z]{2})?$/i,
-    regexPhone: /^[\d]{10}$/,
-    regexComment: /^[\d\s\w\.\@\u00C0-\u024F\u1E00-\u1EFF]{1,200}$/,
-    regexPass: /^[\d\s\w\.\@\u00C0-\u024F\u1E00-\u1EFF]{6,30}$/
-};
+/* PATTERN 
+function validation() {
+    let flag = true;
 
-/** Const string */
-const CHECK_IS_BLANK = 'Bạn không được để trống -_-';
-const CHECK_NAME = 'Tên của bạn nhập không hợp lệ -_-';
-const CHECK_FULL_NAME = 'Tên đầy đủ của bạn nhập không hợp lệ -_-';
-const CHECK_EMAIL = 'Email của bạn nhập không hợp lệ -_-';
-const CHECK_ADDRESS = 'Địa chỉ của bạn nhập không hợp lệ -_-';
-const CHECK_PHONE = 'Số điện thoại của bạn nhập không hợp lệ -_-';
-const CHECK_COMMENT = 'Bình luận của bạn nhập không hợp lệ -_-';
-const CHECK_PASS = 'Mật khẩu của bạn nhập không bảo mật tốt -_-';
-const CHECK_PASS_CFM = 'Mật khẩu nhập lại của bạn không trùng khớp -_-';
-const CHECK_SELECT = 'Bạn không được để mặc định, hãy lựa chọn -_-';
+    if (!checkNotBlank(txtName, 'KITAJIMA', 'red', 'blue')) {
+        flag = false;
+    }
+
+    return flag;
+}
+
+document.querySelector('[type="submit"]').addEventListener('click', (e) => {
+
+    if (validation()) {
+        
+    }
+
+})
+
+FIXCODE với nút button reset type="date": txtDate.defaultValue = getFormatCurrentDate();
+
+*/
+
+
+/** Chuỗi rỗng */
+const BLANK = '';
+/** Chuỗi lỗi */
+const ERROR = 'Error...! -_-';
 
 /**
- * Get element by ID
+ * TODO: Lấy id của selector cần DOM
  * 
- * @param id ID
+ * @param {id} ID Của selector
+ * @returns Object
+ * @author Kitajima2910
  */
-function DomID(id) {
+function domID(id) {
     return document.getElementById(id);
 }
 
-// DomID with input normal
-var txtName = DomID('txtName');
-var txtFullName = DomID('txtFullName');
-var txtAddress = DomID('txtAddress');
-var txtEmail = DomID('txtEmail');
-var txtPhone = DomID('txtPhone');
-var txtComment = DomID('txtComment');
-var txtPass = DomID('txtPass');
-var txtPassCfm = DomID('txtPassCfm');
-
-// DomID select
-var cbCommon = DomID('cbCommon');
-
-// DomID input date
-var txtDate = DomID('txtDate');
-
-// DomID checkbox, radio
-var ckCommons = document.querySelectorAll('[type="checkbox"]');
-var rdCommons = document.querySelectorAll('[type="radio"]');
-
+/**
+ * TODO: Lấy chuỗi cần DOM, ví dụ: [type="radio"], [type="checkbox"], ...
+ * 
+ * @param {str} str Ví dụ: [type="radio"], [type="checkbox"], ...
+ * @returns Object
+ * @author Kitajima2910
+ */
+function domSelectorAll(str) {
+    return document.querySelectorAll(str);
+}
 
 /**
- * Get current date
+ * TODO: Định dạng yyyy-MM-dd
+ * 
+ * @returns String
+ * @author Kitajima2910
  */
-function getDate() {
+function getFormatCurrentDate() {
     let currentDate = new Date();
     let year = currentDate.getFullYear();
     let month = currentDate.getMonth() + 1;
@@ -79,317 +83,287 @@ function getDate() {
     return `${year}-${month}-${day}`;
 }
 
-txtDate.defaultValue = getDate();
-
 /**
- * Get checkbox
+ * TODO: Lấy các giá trị TRUE của checkbox/radio
  * 
- * @param checkboxs Array checkbox 
+ * @param  {...ArrCKRD} ArrCKRD Checkbox hoặc radio 
+ * @returns Array
+ * @author Kitajima2910
  */
-function getCheckBox(...checkboxs) {
-    let arrCheckboxs = [];
-    checkboxs[0].forEach(e => {
+function getCheckboxAndRadio(...arrCKRD) {
+    let tmpArrCKRD = [];
+    arrCKRD[0].forEach(e => {
         if (e.checked) {
-            arrCheckboxs.push(e.value);
+            tmpArrCKRD.push(e.value);
         }
     });
-    return arrCheckboxs;
+    return tmpArrCKRD;
 }
 
 /**
- * Get radio
+ * TODO: kiểm tra xem input, select(option đầu tiên phải BLANK), textarea
  * 
- * @param radio Arr Radio 
+ * @param {field} field Trường cần kiểm tra
+ * @param {content} content Nội dung cần hiển thị khi lỗi
+ * @param  {...borderColor} borderColor Màu sắc hiển thị khi kiểm tra sai/đúng cho border 
+ * @returns Boolean
+ * @author Kitajima2910
  */
-function getRadio(...radios) {
-    let tmpRd = '';
-    radios[0].forEach(e => {
-        if (e.checked) {
-            tmpRd = e.value;
+function checkNotBlank(field, content, ...borderColor) {
+    if (field.value.trim().length === 0) {
+        if (borderColor.length !== 0) {
+            field.style.borderColor = borderColor[0];
         }
-    });
-    return tmpRd;
+        field.setCustomValidity(content);
+        return false;
+    } else {
+        if (borderColor.length !== 0) {
+            field.style.borderColor = borderColor[1];
+        }
+        field.setCustomValidity(BLANK);
+        return true;
+    }
 }
 
 /**
- * Check date
+ * TODO: kiểm tra các regex
  * 
- * @param date Date 
+ * @param {field} field Trường cần kiểm tra
+ * @param {regex} regex Biểu thức chính quy
+ * @param {content} content Nội dung cần hiển thị khi lỗi
+ * @param  {...borderColor} borderColor Màu sắc hiển thị khi kiểm tra sai/đúng cho border 
+ * @returns Boolean
+ * @author Kitajima2910
  */
-function checkDate(date) {
+function checkRegex(field, regex, content, ...borderColor) {
+    if (regex.test(field.value.trim())) {
+        if (borderColor.length !== 0) {
+            field.style.borderColor = borderColor[0];
+        }
+        field.setCustomValidity(BLANK);
+        return true;
+    } else {
+        if (borderColor.length !== 0) {
+            field.style.borderColor = borderColor[1];
+        }
+        field.setCustomValidity(content);
+        return false;
+    }
+}
+
+/**
+ * TODO: Kiểm tra độ tuổi
+ * 
+ * @param {field} field type="date" <== giá trị date
+ * @param {number} number Số tuổi chỉ định ví dụ: < 18 bạn chưa đủ 18 tuổi
+ * @param {content} content Nội dung cần hiển thị khi lỗi
+ * @param  {...borderColor} borderColor Màu sắc hiển thị khi kiểm tra sai/đúng cho border 
+ * @returns Boolean
+ * @author Kitajima2910
+ */
+function checkAge(field, number, content, ...borderColor) {
     let currentYear = new Date().getFullYear();
-    let arrDate = date.value.split('-');
-    return currentYear - +arrDate[0];
+    let arrDate = field.value.split('-');
+
+    if (currentYear - +arrDate[0] < number) {
+        if (borderColor.length !== 0) {
+            field.style.borderColor = borderColor[0];
+        }
+        field.setCustomValidity(content);
+        return false;
+    } else {
+        if (borderColor.length !== 0) {
+            field.style.borderColor = borderColor[1];
+        }
+        field.setCustomValidity(BLANK);
+        return true;
+    }
 }
 
 /**
- * Realtime check
+ * TODO: Hiển thị danh sách dạng cơ bản
  * 
- * @param field Field 
- * @param typeEvent Type event (input, keyup,...) 
- * @param regex Regex
- * @param content MSG
+ * @param {titles} titles Mảng các title
+ * @param {values} values Mảng các giá trị
+ * @author Kitajima2910
+ * @returns String
  */
-function checkRealtime(field, typeEvent, regex, content) {
-    if (field) {
+function getInfoBasic(titles, values) {
+    let arrInfo = [];
+    if (titles.length === values.length) {
+        for (let i = 0; i < titles.length; i++) {
+            arrInfo.push(`${titles[i]}: ${values[i]}`);
+        }
+    } else {
+        console.error(ERROR);
+        return;
+    }
+    return arrInfo.join('\n');
+}
+
+/**
+ * TODO: IST chừa hàm checkRealtimeIST và hàm checkIST
+ * 
+ * ? Sử dụng checkRealtimeIST và checkIST cùng 1 lúc và cùng MSG sẽ hiệu quả
+ * ? Sử dụng checkRealtimePassCfm và checkPassCfm cùng 1 lúc và cùng MSG sẽ hiệu quả
+ */
+class IST {
+
+    /**
+     * TODO: kiểm tra realtime input, select(option đầu tiên phải BLANK), textarea
+     * 
+     * @param {field} field Input, Select, textarea
+     * @param {typeEvent} typeEvent Loại event
+     * @param {content} content Nội dung thông báo lỗi
+     * @param {regex} regex Biểu thức chính quy
+     * @param {contentRegex} contentRegex Nội dụng lỗi khi sử dụng regex
+     * @param {...borderColor} borderColor Màu sắc hiển thị khi kiểm tra sai/đúng cho border
+     * @returns Void
+     * @author kitajima2910
+     */
+    static checkRealtimeIST = (field, typeEvent, content, regex, contentRegex, ...borderColor) => {
         field.addEventListener(typeEvent, () => {
-            if (field.value.trim().length === 0) {
-                field.style.border = '2px solid red';
-                field.setCustomValidity(CHECK_IS_BLANK);
+            if (field.value.trim() === '') {
+                if (borderColor.length !== 0) {
+                    field.style.borderColor = borderColor[0];
+                }
+                field.setCustomValidity(content);
             } else {
-                if (regex.test(field.value.trim())) {
-                    field.style.border = '2px solid blue';
-                    field.setCustomValidity('');
+                if (regex === '') {
+                    regex = null;
+                }
+                if (regex !== null) {
+                    if (regex.test(field.value)) {
+                        if (borderColor.length !== 0) {
+                            field.style.borderColor = borderColor[1];
+                        }
+                        field.setCustomValidity(BLANK);
+                    } else {
+                        if (borderColor.length !== 0) {
+                            field.style.borderColor = borderColor[0];
+                        }
+                        field.setCustomValidity(contentRegex);
+                    }
                 } else {
-                    field.style.border = '2px solid red';
-                    field.setCustomValidity(content);
+                    if (borderColor.length !== 0) {
+                        field.style.borderColor = borderColor[1];
+                    }
+                    field.setCustomValidity(BLANK);
                 }
             }
         });
     }
-}
 
-/**
- * Realtime combobox
- * 
- * @param field Combobox 
- */
-function checkRealtimeCombobox(field, typeEvent) {
-    if (field) {
-        field.addEventListener(typeEvent, () => {
-            if (field.value === '') {
-                field.style.border = '2px solid red';
-                field.setCustomValidity(CHECK_SELECT);
-            } else {
-                field.style.border = '2px solid blue';
-                field.setCustomValidity('');
+    /**
+     * TODO: kiểm tra input, select, textarea
+     * 
+     * @param {field} field Input, Select(option đầu tiên phải BLANK), textarea
+     * @param {content} content Nội dung thông báo lỗi
+     * @param {regex} regex Biểu thức chính quy
+     * @param {contentRegex} contentRegex Nội dụng lỗi khi sử dụng regex
+     * @param {...borderColor} borderColor Màu sắc hiển thị khi kiểm tra sai/đúng cho border
+     * @returns Boolean
+     * @author kitajima2910
+     */
+    static checkIST = (field, content, regex, contentRegex, ...borderColor) => {
+        if (field.value.trim() === '') {
+            if (borderColor.length !== 0) {
+                field.style.borderColor = borderColor[0];
             }
-        });
-    }
-}
-
-/**
- * Realtime PassCfm
- * 
- * @param field Field
- * @param content Content 
- * @param fields Field [0, 1, ...]
- */
-function checkRealtimePassCfm(field, typeEvent, content, ...fields) {
-    if (field) {
-        field.addEventListener(typeEvent, () => {
-            if (field.value.length === 0) {
-                field.style.border = '2px solid red';
-                field.setCustomValidity(CHECK_IS_BLANK);
-            } else {
-                if (field.value === fields[0].value) {
-                    field.style.border = '2px solid blue';
-                    field.setCustomValidity('');
+            field.setCustomValidity(content);
+            return false;
+        } else {
+            if (regex === '') {
+                regex = null;
+            }
+            if (regex !== null) {
+                if (regex.test(field.value)) {
+                    if (borderColor.length !== 0) {
+                        field.style.borderColor = borderColor[1];
+                    }
+                    field.setCustomValidity(BLANK);
+                    return true;
                 } else {
-                    field.style.border = '2px solid red';
-                    field.setCustomValidity(content);
+                    if (borderColor.length !== 0) {
+                        field.style.borderColor = borderColor[0];
+                    }
+                    field.setCustomValidity(contentRegex);
+                    return false;
+                }
+            } else {
+                if (borderColor.length !== 0) {
+                    field.style.borderColor = borderColor[1];
+                }
+                field.setCustomValidity(BLANK);
+                return true;
+            }
+        }
+    }
+
+    /**
+     * TODO: Kiểm tra realtime password confirm
+     * 
+     * @param {passCfm} passCfm Mật khẩu nhập lại
+     * @param {pass} pass Mật khẩu để confirm
+     * @param {content} content Nội dung báo lỗi
+     * @param {...borderColor} borderColor Màu sắc hiển thị khi kiểm tra sai/đúng cho border
+     * @returns Void
+     * @author Kitajima2910
+     */
+    static checkRealtimePassCfm = (passCfm, pass, content, ...borderColor) => {
+        passCfm.addEventListener('input', () => {
+            if (passCfm.value.length === 0) {
+                if (borderColor.length !== 0) {
+                    passCfm.style.borderColor = borderColor[0];
+                }
+                return false;
+            } else {
+                if (passCfm.value === pass.value) {
+                    if (borderColor.length !== 0) {
+                        passCfm.style.borderColor = borderColor[1];
+                    }
+                    passCfm.setCustomValidity(BLANK);
+                } else {
+                    if (borderColor.length !== 0) {
+                        passCfm.style.borderColor = borderColor[0];
+                    }
+                    passCfm.setCustomValidity(content);
                 }
             }
         });
     }
-}
 
-// Check style input
-checkRealtime(DomID('txtName'), 'input', PATTERN.regexName, CHECK_NAME);
-checkRealtime(DomID('txtFullName'), 'input', PATTERN.regexFullName, CHECK_FULL_NAME);
-checkRealtime(DomID('txtAddress'), 'input', PATTERN.regexAddress, CHECK_ADDRESS);
-checkRealtime(DomID('txtEmail'), 'input', PATTERN.regexEmail, CHECK_EMAIL);
-checkRealtime(DomID('txtPhone'), 'input', PATTERN.regexPhone, CHECK_PHONE);
-checkRealtime(DomID('txtComment'), 'input', PATTERN.regexComment, CHECK_COMMENT);
-checkRealtime(DomID('txtPass'), 'input', PATTERN.regexPass, CHECK_PASS);
-checkRealtimePassCfm(DomID('txtPassCfm'), 'input', CHECK_PASS_CFM, txtPass);
-checkRealtimeCombobox(DomID('cbCommon'), 'change');
-
-/**
- * Check Regex (input, select)
- * 
- * @param field Filed 
- * @param regex Regex
- * @param content Content
- */
-function checkRegex(field, regex, content) {
-    if (field) {
-        if (field.value.trim().length === 0) {
-            field.setCustomValidity(CHECK_IS_BLANK);
+    /**
+     * TODO: Kiểm tra password confirm
+     * 
+     * @param {passCfm} passCfm Mật khẩu nhập lại
+     * @param {pass} pass Mật khẩu để confirm
+     * @param {content} content Nội dung báo lỗi
+     * @param {...borderColor} borderColor Màu sắc hiển thị khi kiểm tra sai/đúng cho border
+     * @returns Void
+     * @author Kitajima2910
+     */
+    static checkPassCfm = (passCfm, pass, content, ...borderColor) => {
+        if (passCfm.value.length === 0) {
+            if (borderColor.length !== 0) {
+                passCfm.style.borderColor = borderColor[0];
+            }
             return false;
         } else {
-            if (regex.test(field.value.trim())) {
-                field.setCustomValidity('');
+            if (passCfm.value === pass.value) {
+                if (borderColor.length !== 0) {
+                    passCfm.style.borderColor = borderColor[1];
+                }
+                passCfm.setCustomValidity(BLANK);
                 return true;
             } else {
-                field.setCustomValidity(content);
+                if (borderColor.length !== 0) {
+                    passCfm.style.borderColor = borderColor[0];
+                }
+                passCfm.setCustomValidity(content);
                 return false;
             }
         }
     }
+
 }
-
-/**
- * Check combobox
- * 
- * @param field Combobox 
- */
-function checkCombobox(field) {
-    if (field) {
-        if (field.value === '') {
-            field.setCustomValidity(CHECK_SELECT);
-            return false;
-        } else {
-            field.setCustomValidity('');
-            return true;
-        }
-    }
-}
-
-/**
- * Check combobox
- * 
- * @param field Combobox 
- */
-function checkDateAge(field, ageNumber) {
-    if (field) {
-        if (checkDate(field) < ageNumber) {
-            field.setCustomValidity('Bạn chưa đủ 18 tuổi -_-');
-            return false;
-        } else {
-            field.setCustomValidity('');
-            return true;
-        }
-    }
-}
-
-/**
- * Check PassCfm
- * 
- * @param field Field
- * @param content Content
- * @param fields Fields[0, 1, 2, ...]
- */
-function checkPassCfm(field, content, ...fields) {
-    if (field) {
-        if (field.value.length === 0) {
-            field.setCustomValidity(CHECK_IS_BLANK);
-            return false;
-        } else {
-            if (field.value === fields[0].value) {
-                field.setCustomValidity('');
-                return true;
-            } else {
-                field.setCustomValidity(content);
-                return false;
-            }
-        }
-    }
-}
-
-/**
- * Check validation for form (input, select)
- */
-function validation() {
-    // flag is true    
-    let flag = true;
-
-    if (txtName !== null) {
-        if (!checkRegex(txtName, PATTERN.regexName, CHECK_NAME)) {
-            flag = false;
-        }
-    }
-    if (txtFullName !== null) {
-        if (!checkRegex(txtFullName, PATTERN.regexFullName, CHECK_FULL_NAME)) {
-            flag = false;
-        }
-    }
-    if (txtAddress !== null) {
-        if (!checkRegex(txtAddress, PATTERN.regexAddress, CHECK_ADDRESS)) {
-            flag = false;
-        }
-    }
-    if (txtEmail !== null) {
-        if (!checkRegex(txtEmail, PATTERN.regexEmail, CHECK_EMAIL)) {
-            flag = false;
-        }
-    }
-    if (txtPhone !== null) {
-        if (!checkRegex(txtPhone, PATTERN.regexPhone, CHECK_PHONE)) {
-            flag = false;
-        }
-    }
-    if (txtComment !== null) {
-        if (!checkRegex(txtComment, PATTERN.regexComment, CHECK_COMMENT)) {
-            flag = false;
-        }
-    }
-    if (txtPass !== null) {
-        if (!checkRegex(txtPass, PATTERN.regexPass, CHECK_PASS)) {
-            flag = false;
-        }
-    }
-    if (txtPassCfm !== null) {
-        if (!checkPassCfm(txtPassCfm, CHECK_PASS_CFM, txtPass)) {
-            flag = false;
-        }
-    }
-    if (cbCommon !== null) {
-        if (!checkCombobox(cbCommon)) {
-            flag = false;
-        }
-    }
-    if (txtDate !== null) {
-        if (!checkDateAge(txtDate, 17)) {
-            flag = false;
-        }
-    }
-
-    return flag;
-}
-
-// Check button type submit
-document.querySelector('[type="submit"]').addEventListener('click', (e) => {
-
-    if (validation()) {
-        let arr = [];
-        arr.push('====== THÔNG TIN ======');
-        // arr.push('Date: ' + txtDate.value);
-        arr.push('=======================')
-        alert(arr.join('\n'));
-        e.preventDefault();
-    }
-
-});
-
-/**
- * Default filed
- * 
- * @param fields Array field
- * @param tag [input, seclet, ...] 
- */
-function defaultField(fields, tag) {
-    if (tag === 'input') {
-        fields.forEach(field => {
-            // field.style.borderWidth = '2px';
-            // field.style.borderStyle = 'inset';
-            // field.style.borderColor = 'initial';
-        });
-    }
-    if (tag === 'select') {
-        fields.forEach(field => {
-            // field.style.borderWidth = '1px';
-            // field.style.borderStyle = 'solid';
-            // field.style.borderColor = 'rgb(169, 169, 169)';
-        });
-    }
-}
-
-
-document.querySelector('[type="reset"]').addEventListener('click', (e) => {
-    // let inputs = document.querySelectorAll('input');
-    // let selects = document.querySelectorAll('select');
-    txtDate.defaultValue = getDate();
-    // defaultField(inputs, 'input');
-    // defaultField(selects, 'select');
-})
