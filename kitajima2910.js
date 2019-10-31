@@ -41,7 +41,28 @@ FIXCODE với nút button reset type="date": txtDate.defaultValue = getFormatCur
 /** Chuỗi rỗng */
 const BLANK = '';
 /** Chuỗi lỗi */
-const ERROR = 'Error...! -_-';
+const ERROR = 'Error...! *,..,*';
+/** Chuỗi kitajima2910 */
+const KITAJIMA2910 = 'KITAJIMA2910: ';
+/** https://anonystick.com/blog-developer/cach-hien-thi-maucolor-bgcolor-trong-consolelog-cua-developer-javascript-aPpiqoCb.jsx */
+const colorize = (...args) => ({
+    black: `\x1b[30m${args.join(' ')}`,
+    red: `\x1b[31m${args.join(' ')}`,
+    green: `\x1b[32m${args.join(' ')}`,
+    yellow: `\x1b[33m${args.join(' ')}`,
+    blue: `\x1b[34m${args.join(' ')}`,
+    magenta: `\x1b[35m${args.join(' ')}`,
+    cyan: `\x1b[36m${args.join(' ')}`,
+    white: `\x1b[37m${args.join(' ')}`,
+    bgBlack: `\x1b[40m${args.join(' ')}\x1b[0m`,
+    bgRed: `\x1b[41m${args.join(' ')}\x1b[0m`,
+    bgGreen: `\x1b[42m${args.join(' ')}\x1b[0m`,
+    bgYellow: `\x1b[43m${args.join(' ')}\x1b[0m`,
+    bgBlue: `\x1b[44m${args.join(' ')}\x1b[0m`,
+    bgMagenta: `\x1b[45m${args.join(' ')}\x1b[0m`,
+    bgCyan: `\x1b[46m${args.join(' ')}\x1b[0m`,
+    bgWhite: `\x1b[47m${args.join(' ')}\x1b[0m`
+});
 
 /**
  * TODO: Lấy id của selector cần DOM
@@ -185,11 +206,15 @@ function checkAge(field, number, content, ...borderColor) {
  * 
  * @param {titles} titles Mảng các title
  * @param {values} values Mảng các giá trị
+ * @param {...contentHeader} contentHeader Nội dung tiêu đề nếu có
  * @author Kitajima2910
  * @returns String
  */
-function getInfoBasic(titles, values) {
+function getInfoBasic(titles, values, ...contentHeader) {
     let arrInfo = [];
+    if(contentHeader.length !== 0) {
+        arrInfo.push(contentHeader);
+    }
     if (titles.length === values.length) {
         for (let i = 0; i < titles.length; i++) {
             arrInfo.push(`${titles[i]}: ${values[i]}`);
@@ -366,4 +391,33 @@ class IST {
         }
     }
 
+}
+
+/**
+ * TODO: Logger error và info
+ */
+class logger {
+
+    /**
+    * TODO: Logger error
+    * 
+    * @param {msg} msg Nội dung cần truyền vào 
+    * @returns Void
+    * @author kitajima2910
+    */
+    static error = (msg) => {
+        console.error(colorize(colorize(KITAJIMA2910).red, colorize(msg).green).bgWhite);
+    }
+
+    /**
+    * TODO: Logger info
+    * 
+    * @param {msg} msg Nội dung cần truyền vào 
+    * @returns Void
+    * @author kitajima2910
+    */
+    static info = (msg) => {
+        console.info(colorize(colorize(KITAJIMA2910).blue, colorize(msg).green).bgWhite);
+    }
+    
 }
